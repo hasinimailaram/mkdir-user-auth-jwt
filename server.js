@@ -22,7 +22,17 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 // SQLite database
-const db = new sqlite3.Database("./data/users.db", (err) => {
+const fs = require("fs");
+
+const dataDir = path.join(__dirname, "data");
+
+if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true });
+}
+
+const dbPath = path.join(dataDir, "users.db");
+
+const db = new sqlite3.Database(dbPath, (err) => {
     if (err) {
         console.error("Database connection error:", err.message);
     } else {
